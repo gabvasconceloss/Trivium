@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-canvas text-ink font-body antialiased;
+  @apply dark:bg-[#0F1222] dark:text-[#EDEFF7];
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+h1, h2, h3, h4 {
+  @apply font-display;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #3b5fe0;
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+::selection {
+  background: #cfe0ff;
+  color: #181b2e;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d7dae5 transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background-color: #d7dae5; border-radius: 999px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Editor por blocos */
+.block-text[contenteditable]:empty::before {
+  content: attr(data-placeholder);
+  color: #A3A7BD;
+}
+.block-text {
+  outline: none;
+}
