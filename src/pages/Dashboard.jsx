@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import AppLayout from '../components/AppLayout'
-import BannerHeader from '../components/BannerHeader'
-import StatCard from '../components/StatCard'
-import { useAuth } from '../context/AuthContext'
-import { supabase } from '../lib/supabaseClient'
-import { primeiroNome } from '../lib/utils'
+import LayoutPrincipal from '../components/LayoutPrincipal'
+import CabecalhoBanner from '../components/CabecalhoBanner'
+import CartaoEstatistica from '../components/CartaoEstatistica'
+import { useAuth } from '../context/ContextoAutenticacao'
+import { supabase } from '../lib/clienteSupabase'
+import { primeiroNome } from '../lib/utilidades'
 
 function calcularProgressoChecklist(blocos = []) {
   let total = 0
@@ -22,7 +22,7 @@ function calcularProgressoChecklist(blocos = []) {
 export default function Dashboard() {
   const { aluno } = useAuth()
   const navigate = useNavigate()
-  const [continuar, setContinuar] = useState(undefined) // undefined = carregando, null = nada encontrado
+  const [continuar, setContinuar] = useState(undefined) 
 
   useEffect(() => {
     if (!aluno?.id) return
@@ -52,17 +52,17 @@ export default function Dashboard() {
   const pct = progresso && progresso.total > 0 ? Math.round((progresso.concluidos / progresso.total) * 100) : null
 
   return (
-    <AppLayout>
-      <BannerHeader
+    <LayoutPrincipal>
+      <CabecalhoBanner
         titulo={`Olá, ${primeiroNome(aluno.nome)}! 👋`}
         subtitulo="Foque nos seus estudos e vá cada vez mais longe."
         icone={<span className="text-[7rem]">🎓</span>}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <StatCard icone="📄" iconeBg="#EAF0FD" label="Tópicos Criados" valor={aluno.topicos_criados} />
-        <StatCard icone="🔥" iconeBg="#FDECC8" label="Sequência" valor={`${aluno.sequencia_dias} ${aluno.sequencia_dias === 1 ? 'dia' : 'dias'}`} />
-        <StatCard
+        <CartaoEstatistica icone="📄" iconeBg="#EAF0FD" label="Tópicos Criados" valor={aluno.topicos_criados} />
+        <CartaoEstatistica icone="🔥" iconeBg="#FDECC8" label="Sequência" valor={`${aluno.sequencia_dias} ${aluno.sequencia_dias === 1 ? 'dia' : 'dias'}`} />
+        <CartaoEstatistica
           icone="📈"
           iconeBg="#E2F7F2"
           label="Média Geral"
@@ -117,6 +117,6 @@ export default function Dashboard() {
           </div>
         )}
       </div>
-    </AppLayout>
+    </LayoutPrincipal>
   )
 }

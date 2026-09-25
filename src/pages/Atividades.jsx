@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import AppLayout from '../components/AppLayout'
-import BannerHeader from '../components/BannerHeader'
+import { useMemo, useState } from 'react'
+import AppLayout from '../components/LayoutPrincipal'
+import BannerHeader from '../components/CabecalhoBanner'
 import Modal from '../components/Modal'
-import { IconPlus, IconTrash, IconCheck } from '../components/icons'
-import { useAuth } from '../context/AuthContext'
+import { IconPlus, IconChevronLeft, IconChevronRight, IconTrash } from '../components/icones'
+import { useAuth } from '../context/ContextoAutenticacao'
+import { useEventos } from '../hooks/useEventos'
 import { useAtividades } from '../hooks/useAtividades'
 import { useCadernos } from '../hooks/useCadernos'
-import { formatarDataCurta } from '../lib/utils'
 
 function statusVisual(atividade) {
   if (atividade.status === 'entregue') return { label: 'Entregue', cor: 'text-accent-dark bg-accent-light' }

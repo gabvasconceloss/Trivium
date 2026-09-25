@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/ContextoAutenticacao'
 
-export default function Signup() {
+export default function Cadastro() {
   const { criarConta } = useAuth()
   const navigate = useNavigate()
   const [nome, setNome] = useState('')

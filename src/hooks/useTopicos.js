@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../lib/clienteSupabase' // Substitui o antigo '../lib/supabaseClient'
 import { buscarVideosParaTopico, registrarParticipacaoAula } from '../lib/curadoria'
-import { gerarId } from '../lib/utils'
+import { gerarId } from '../lib/utilidades'
 
 const BLOCO_INICIAL = () => [{ id: gerarId(), tipo: 'texto', conteudo: '' }]
 

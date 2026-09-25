@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
-import InsertMenu from './InsertMenu'
-import { IconPlus, IconTrash } from './icons'
-import { gerarId } from '../lib/utils'
-import { supabase } from '../lib/supabaseClient'
+import InsertMenu from './MenuInsercao'
+import { IconPlus, IconTrash } from './icones'
+import { gerarId } from '../lib/utilidades'
+import { supabase } from '../lib/clienteSupabase'
 
 function blocoVazio(tipo) {
   switch (tipo) {

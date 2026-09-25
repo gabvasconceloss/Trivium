@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import AppLayout from '../components/AppLayout'
-import BannerHeader from '../components/BannerHeader'
-import { useAuth } from '../context/AuthContext'
-import { IconLogout } from '../components/icons'
+import LayoutPrincipal from '../components/LayoutPrincipal'
+import CabecalhoBanner from '../components/CabecalhoBanner'
+import { useAuth } from '../context/ContextoAutenticacao'
+import { IconLogout } from '../components/icones'
 
 function Toggle({ ativo, onChange }) {
   return (
@@ -21,7 +21,7 @@ function Toggle({ ativo, onChange }) {
   )
 }
 
-export default function Account() {
+export default function Conta() {
   const { aluno, turma, sair, atualizarPerfil } = useAuth()
   const navigate = useNavigate()
   const [salvandoNome, setSalvandoNome] = useState(false)
@@ -53,8 +53,8 @@ export default function Account() {
   if (!aluno) return null
 
   return (
-    <AppLayout>
-      <BannerHeader
+    <LayoutPrincipal>
+      <CabecalhoBanner
         titulo="Minha Conta"
         subtitulo="Gerencie suas preferências e informações pessoais."
         icone={<span className="text-[7rem]">👤</span>}
@@ -147,6 +147,6 @@ export default function Account() {
           </button>
         </div>
       </div>
-    </AppLayout>
+    </LayoutPrincipal>
   )
 }

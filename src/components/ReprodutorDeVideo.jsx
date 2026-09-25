@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconPlay } from './icons'
+import { IconPlay } from './icones'
 
 function CardVideo({ video, onAssistir }) {
   const [tocando, setTocando] = useState(false)

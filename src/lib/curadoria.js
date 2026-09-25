@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient'
+import { supabase } from './clienteSupabase'
 
 /**
  * Aciona a Edge Function "curadoria-videos" (RF14-RF18).

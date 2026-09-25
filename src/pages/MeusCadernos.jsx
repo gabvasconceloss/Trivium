@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import AppLayout from '../components/AppLayout'
-import BannerHeader from '../components/BannerHeader'
-import NotebookCard from '../components/NotebookCard'
+import AppLayout from '../components/LayoutPrincipal'
+import BannerHeader from '../components/CabecalhoBanner'
+import NotebookCard from '../components/CartaoCaderno'
 import Modal from '../components/Modal'
-import { SkeletonNotebookGrid } from '../components/Skeleton'
-import { IconPlus } from '../components/icons'
-import { useAuth } from '../context/AuthContext'
+import { SkeletonNotebookGrid } from '../components/EsqueletoLoader'
+import { IconPlus } from '../components/icones'
+import { useAuth } from '../context/ContextoAutenticacao'
 import { useCadernos } from '../hooks/useCadernos'
-import { CORES_CADERNO, ICONES_CADERNO } from '../lib/utils'
+import { CORES_CADERNO, ICONES_CADERNO } from '../lib/utilidades'
 
 export default function Notebooks() {
   const { aluno } = useAuth()

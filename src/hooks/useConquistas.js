@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../lib/clienteSupabase' // Substitui o antigo '../lib/supabaseClient'
 
 export function useConquistas(alunoId) {
   const [conquistas, setConquistas] = useState([]) // catálogo + progresso mesclados

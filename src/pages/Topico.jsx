@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/ContextoAutenticacao'
 import { useCadernos } from '../hooks/useCadernos'
 import { useTopicos } from '../hooks/useTopicos'
 import { useAutosave } from '../hooks/useAutosave'
-import BlockEditor from '../components/BlockEditor'
-import VideoPlayer from '../components/VideoPlayer'
-import Sidebar from '../components/Sidebar'
-import { IconArrowLeft, IconCloud, IconSliders, IconMoon, IconSun, IconSparkles, IconMenu, IconTrash } from '../components/icons'
-import { CORES_CADERNO } from '../lib/utils'
+import BlockEditor from '../components/EditorDeBlocos'
+import VideoPlayer from '../components/ReprodutorDeVideo'
+import Sidebar from '../components/MenuLateral'
+import { IconArrowLeft, IconCloud, IconSliders, IconMoon, IconSun, IconSparkles, IconMenu, IconTrash } from '../components/icones'
+import { CORES_CADERNO } from '../lib/utilidades'
 
 const STATUS_LABEL = { idle: '', saving: 'Salvando…', saved: 'Salvo', error: 'Erro ao salvar' }
 

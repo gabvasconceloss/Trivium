@@ -1,4 +1,4 @@
-import { usePWAInstall } from '../hooks/usePWAInstall'
+import { usePWAInstall } from '../hooks/useInstalacaoPWA'
 import { useState } from 'react'
 
 export default function PWAInstallPrompt() {

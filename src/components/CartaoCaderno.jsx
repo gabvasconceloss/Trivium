@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { formatarTempoRelativo } from '../lib/utils'
-import { IconClock, IconBook, IconTrash } from './icons'
+import { formatarTempoRelativo } from '../lib/utilidades'
+import { IconClock, IconBook, IconTrash } from './icones'
 
 export default function NotebookCard({ caderno, quantidadeTopicos = 0, onExcluir }) {
   const navigate = useNavigate()

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Sidebar from './Sidebar'
-import PWAInstallPrompt from './PWAInstallPrompt'
-import { IconMenu } from './icons'
-import { useAuth } from '../context/AuthContext'
+import MenuLateral from './MenuLateral'
+import PromptInstalacaoPWA from './PromptInstalacaoPWA'
+import { IconMenu } from './icones'
+import { useAuth } from '../context/ContextoAutenticacao'
 
-export default function AppLayout({ children }) {
+export default function LayoutPrincipal({ children }) {
   const { aluno, turma, sair } = useAuth()
   const navigate = useNavigate()
   const [sidebarAberta, setSidebarAberta] = useState(false)
@@ -16,8 +16,8 @@ export default function AppLayout({ children }) {
   }
 
   return (
-    <div className="flex h-full">
-      <Sidebar
+    <div className="flex h-full bg-canvas dark:bg-[#0F1222]">
+      <MenuLateral
         aberta={sidebarAberta}
         onFechar={() => setSidebarAberta(false)}
         aluno={aluno}
@@ -45,7 +45,7 @@ export default function AppLayout({ children }) {
         <main className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-7 pb-10">{children}</main>
       </div>
 
-      <PWAInstallPrompt />
+      <PromptInstalacaoPWA />
     </div>
   )
 }

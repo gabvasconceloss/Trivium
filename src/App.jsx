@@ -1,16 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider } from './context/ContextoAutenticacao'
 import RotaProtegida from './components/RotaProtegida'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import Dashboard from './pages/Dashboard'
-import Achievements from './pages/Achievements'
-import Notebooks from './pages/Notebooks'
-import Notebook from './pages/Notebook'
-import Topic from './pages/Topic'
-import Activities from './pages/Activities'
-import CalendarPage from './pages/Calendar'
-import Account from './pages/Account'
+
+// Importação das Páginas em Português
+import Entrar from './pages/Login' // Assumindo que o ficheiro se chama Login.jsx. Se for Entrar.jsx, mude aqui!
+import Cadastro from './pages/Cadastro'
+import Painel from './pages/Dashboard' 
+import Conquistas from './pages/Conquistas'
+import MeusCadernos from './pages/MeusCadernos'
+import Caderno from './pages/Caderno'
+import Topico from './pages/Topico'
+import Atividades from './pages/Atividades'
+import Calendario from './pages/Calendario'
+import Conta from './pages/Conta'
 
 function Protegida({ children }) {
   return <RotaProtegida>{children}</RotaProtegida>
@@ -22,17 +24,20 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/criar-conta" element={<Signup />} />
+          
+          {/* Rotas Públicas */}
+          <Route path="/login" element={<Entrar />} />
+          <Route path="/criar-conta" element={<Cadastro />} />
 
-          <Route path="/dashboard" element={<Protegida><Dashboard /></Protegida>} />
-          <Route path="/conquistas" element={<Protegida><Achievements /></Protegida>} />
-          <Route path="/cadernos" element={<Protegida><Notebooks /></Protegida>} />
-          <Route path="/caderno/:materiaId" element={<Protegida><Notebook /></Protegida>} />
-          <Route path="/caderno/:materiaId/topico/:topicoId" element={<Protegida><Topic /></Protegida>} />
-          <Route path="/atividades" element={<Protegida><Activities /></Protegida>} />
-          <Route path="/calendario" element={<Protegida><CalendarPage /></Protegida>} />
-          <Route path="/conta" element={<Protegida><Account /></Protegida>} />
+          {/* Rotas Protegidas */}
+          <Route path="/dashboard" element={<Protegida><Painel /></Protegida>} />
+          <Route path="/conquistas" element={<Protegida><Conquistas /></Protegida>} />
+          <Route path="/cadernos" element={<Protegida><MeusCadernos /></Protegida>} />
+          <Route path="/caderno/:materiaId" element={<Protegida><Caderno /></Protegida>} />
+          <Route path="/caderno/:materiaId/topico/:topicoId" element={<Protegida><Topico /></Protegida>} />
+          <Route path="/atividades" element={<Protegida><Atividades /></Protegida>} />
+          <Route path="/calendario" element={<Protegida><Calendario /></Protegida>} />
+          <Route path="/conta" element={<Protegida><Conta /></Protegida>} />
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

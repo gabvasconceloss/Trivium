@@ -1,29 +1,29 @@
-import AppLayout from '../components/AppLayout'
-import BannerHeader from '../components/BannerHeader'
-import { ConquistaCardDesbloqueada, ConquistaCardProgresso } from '../components/AchievementCard'
-import { useAuth } from '../context/AuthContext'
+import LayoutPrincipal from '../components/LayoutPrincipal'
+import CabecalhoBanner from '../components/CabecalhoBanner'
+import { ConquistaCardDesbloqueada, ConquistaCardProgresso } from '../components/CartaoConquista'
+import { useAuth } from '../context/ContextoAutenticacao'
 import { useConquistas } from '../hooks/useConquistas'
 
-export default function Achievements() {
+export default function Conquistas() {
   const { aluno } = useAuth()
   const { conquistadas, proximas, ranking, carregando, erro } = useConquistas(aluno?.id)
 
   if (carregando) {
     return (
-      <AppLayout>
-        <BannerHeader titulo="Conquistas" subtitulo="Acompanhe seu progresso e conquistas." icone={<span className="text-[7rem]">🏆</span>} />
+      <LayoutPrincipal>
+        <CabecalhoBanner titulo="Conquistas" subtitulo="Acompanhe seu progresso e conquistas." icone={<span className="text-[7rem]">🏆</span>} />
         <div className="grid sm:grid-cols-3 gap-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="h-28 rounded-2xl bg-black/5 animate-pulse" />
           ))}
         </div>
-      </AppLayout>
+      </LayoutPrincipal>
     )
   }
 
   return (
-    <AppLayout>
-      <BannerHeader titulo="Conquistas" subtitulo="Acompanhe seu progresso e conquistas." icone={<span className="text-[7rem]">🏆</span>} />
+    <LayoutPrincipal>
+      <CabecalhoBanner titulo="Conquistas" subtitulo="Acompanhe seu progresso e conquistas." icone={<span className="text-[7rem]">🏆</span>} />
       {erro && <p className="text-danger text-sm mb-4">{erro}</p>}
 
       <h2 className="font-display font-semibold text-ink dark:text-white mb-3">Conquistas Recentes</h2>
@@ -86,6 +86,6 @@ export default function Achievements() {
           </div>
         </div>
       </div>
-    </AppLayout>
+    </LayoutPrincipal>
   )
 }

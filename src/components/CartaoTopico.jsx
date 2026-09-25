@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { IconTrash, IconSparkles } from './icons'
-import VideoPlayer from './VideoPlayer'
+import { IconTrash, IconSparkles } from './icones'
+import VideoPlayer from './ReprodutorDeVideo'
 
 export default function TopicCard({ topico, onToggleConcluido, onExcluir, onBuscarVideos, onAssistir, onAbrir }) {
   const [buscando, setBuscando] = useState(false)

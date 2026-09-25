@@ -1,8 +1,8 @@
 import { NavLink } from 'react-router-dom'
-import { IconGrid, IconAward, IconBook, IconActivity, IconCalendar, IconUser, IconLogout } from './icons'
+import { IconGrid, IconAward, IconBook, IconActivity, IconCalendar, IconUser, IconLogout } from './icones'
 
 const ITENS_NAV = [
-  { to: '/dashboard', label: 'Dashboard', Icon: IconGrid },
+  { to: '/dashboard', label: 'Painel', Icon: IconGrid },
   { to: '/conquistas', label: 'Conquistas', Icon: IconAward },
   { to: '/cadernos', label: 'Meus Cadernos', Icon: IconBook },
   { to: '/atividades', label: 'Atividades', Icon: IconActivity },
@@ -10,7 +10,7 @@ const ITENS_NAV = [
   { to: '/conta', label: 'Conta', Icon: IconUser }
 ]
 
-export default function Sidebar({ aberta, onFechar, aluno, turma, onSair }) {
+export default function MenuLateral({ aberta, onFechar, aluno, turma, onSair }) {
   return (
     <>
       {aberta && (
