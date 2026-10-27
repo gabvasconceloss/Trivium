@@ -404,7 +404,7 @@ as $$
   from alunos a
   where a.turma_id = (select turma_id from alunos where auth_user_id = auth.uid())
   order by a.xp desc, a.nome asc
-  limit 20;
+  limit 50;
 $$;
 
 create or replace function trivium_ranking_semanal_turma()
@@ -417,7 +417,7 @@ as $$
   where a.turma_id = (select turma_id from alunos where auth_user_id = auth.uid())
   group by a.id, a.nome, a.auth_user_id
   order by xp_semana desc, a.nome asc
-  limit 20;
+  limit 50;
 $$;
 
 create or replace function trivium_registrar_participacao_aula(p_topico_id uuid)
@@ -445,7 +445,8 @@ returns jsonb
 language plpgsql security definer
 as $$
 declare
-  v_xp_recompensa constant int := 30; -- TODO: ajustar valor de recompensa quando definido
+  -- Oficializado: 30 XP de recompensa (removido o TODO hardcoded)
+  v_xp_recompensa constant int := 30; 
   v_indicado_id uuid;
   v_indicador_id uuid;
 begin
