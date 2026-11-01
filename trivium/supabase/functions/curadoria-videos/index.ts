@@ -24,37 +24,86 @@ function formatarDuracao(iso: string): string {
   return `${String(minutos).padStart(2, '0')}:${ss}`
 }
 
-// A Google descontinua/renomeia modelos do Gemini com frequência. Em vez de
-// fixar um nome que pode sumir, perguntamos à própria API quais modelos estão
-// disponíveis agora e escolhemos um que suporte generateContent (preferindo um
-// "flash", mais rápido/barato, mas aceitando qualquer um compatível).
+// A API do Gemini tem um comportamento conhecido e documentado por terceiros:
+// o endpoint ListModels pode listar um modelo (ex: gemini-2.5-flash) como
+// compatível com generateContent mesmo depois dele ter sido aposentado para
+// novas chaves — e a chamada real retorna 404 mesmo assim.
+//
+// A solução recomendada pela própria Google pra esse caso é usar os ALIASES
+// "-latest" (ex: "gemini-flash-latest"), que são ponteiros que a Google
+// sempre mantém redirecionados para um modelo que funciona de verdade.
+// Tentamos os aliases primeiro; só caímos pro ListModels como último recurso.
+const ALIASES_PREFERENCIAIS = ['gemini-flash-latest', 'gemini-pro-latest']
+
 let modeloEmCache: { nome: string; expiraEm: number } | null = null
+
+async function listarModelosCompativeis(apiKey: string): Promise<string[]> {
+  const resposta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`)
+  if (!resposta.ok) throw new Error(`Não foi possível listar os modelos do Gemini (status ${resposta.status}).`)
+  const dados = await resposta.json()
+  const modelos: any[] = dados.models ?? []
+  return modelos
+    .filter((m) => (m.supportedGenerationMethods ?? []).includes('generateContent'))
+    .map((m) => String(m.name).replace(/^models\//, ''))
+}
+
+function aguardar(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+/** 503 (sobrecarga) e 429 (limite de taxa) são erros transitórios comuns no tier
+ * gratuito do Gemini — não é um problema de configuração, só pede retry com espera. */
+async function fetchComRetry(url: string, opcoes: RequestInit, tentativas = 3): Promise<Response> {
+  let ultimaResposta: Response
+  for (let i = 0; i < tentativas; i++) {
+    ultimaResposta = await fetch(url, opcoes)
+    if (ultimaResposta.status !== 503 && ultimaResposta.status !== 429) return ultimaResposta
+    if (i < tentativas - 1) await aguardar(600 * (i + 1)) // 600ms, 1200ms, ...
+  }
+  return ultimaResposta!
+}
+
+/** Testa se um modelo realmente responde a generateContent (não só se está listado). */
+async function modeloFunciona(apiKey: string, modelo: string): Promise<boolean> {
+  const resposta = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'ping' }] }] })
+    }
+  )
+  return resposta.status !== 404
+}
 
 async function resolverModeloGemini(apiKey: string): Promise<string> {
   const agora = Date.now()
   if (modeloEmCache && modeloEmCache.expiraEm > agora) return modeloEmCache.nome
 
-  const resposta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`)
-  if (!resposta.ok) {
-    throw new Error(`Não foi possível listar os modelos do Gemini (status ${resposta.status}).`)
-  }
-  const dados = await resposta.json()
-  const modelos: any[] = dados.models ?? []
-
-  const compativeis = modelos.filter((m) => (m.supportedGenerationMethods ?? []).includes('generateContent'))
-  if (compativeis.length === 0) {
-    throw new Error('Nenhum modelo Gemini disponível para esta chave suporta generateContent.')
+  for (const alias of ALIASES_PREFERENCIAIS) {
+    if (await modeloFunciona(apiKey, alias)) {
+      modeloEmCache = { nome: alias, expiraEm: agora + 30 * 60 * 1000 }
+      return alias
+    }
   }
 
-  // Preferência: "flash" (mais rápido/barato) > "pro" > qualquer outro compatível
-  const escolhido =
-    compativeis.find((m) => /flash/i.test(m.name) && !/image|vision|embedding/i.test(m.name)) ??
-    compativeis.find((m) => /pro/i.test(m.name) && !/image|vision|embedding/i.test(m.name)) ??
-    compativeis[0]
+  // Último recurso: lista os modelos e tenta um por um até achar um que responda de verdade
+  const candidatos = await listarModelosCompativeis(apiKey)
+  const ordenados = [
+    ...candidatos.filter((n) => n.endsWith('-latest') && /flash/i.test(n)),
+    ...candidatos.filter((n) => n.endsWith('-latest') && /pro/i.test(n)),
+    ...candidatos.filter((n) => /flash/i.test(n) && !/image|vision|embedding/i.test(n)),
+    ...candidatos.filter((n) => /pro/i.test(n) && !/image|vision|embedding/i.test(n)),
+    ...candidatos
+  ]
+  for (const nome of [...new Set(ordenados)]) {
+    if (await modeloFunciona(apiKey, nome)) {
+      modeloEmCache = { nome, expiraEm: agora + 30 * 60 * 1000 }
+      return nome
+    }
+  }
 
-  const nomeModelo = escolhido.name.replace(/^models\//, '')
-  modeloEmCache = { nome: nomeModelo, expiraEm: agora + 30 * 60 * 1000 } // cache de 30min no processo
-  return nomeModelo
+  throw new Error('Nenhum modelo Gemini disponível para esta chave respondeu a generateContent.')
 }
 
 async function gerarTermosDeBusca(materia: string, assunto: string, idade: number) {
@@ -76,7 +125,7 @@ async function gerarTermosDeBusca(materia: string, assunto: string, idade: numbe
   }
 
   let modelo = await resolverModeloGemini(apiKey)
-  let resposta = await fetch(
+  let resposta = await fetchComRetry(
     `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`,
     { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpoRequisicao) }
   )
@@ -85,13 +134,16 @@ async function gerarTermosDeBusca(materia: string, assunto: string, idade: numbe
   if (resposta.status === 404) {
     modeloEmCache = null
     modelo = await resolverModeloGemini(apiKey)
-    resposta = await fetch(
+    resposta = await fetchComRetry(
       `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`,
       { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpoRequisicao) }
     )
   }
 
-  if (!resposta.ok) throw new Error(`Falha ao consultar a API de IA (status ${resposta.status}, modelo ${modelo}).`)
+  if (!resposta.ok) {
+    const corpoErro = await resposta.text().catch(() => '')
+    throw new Error(`Falha ao consultar a API de IA (status ${resposta.status}, modelo ${modelo}). ${corpoErro.slice(0, 200)}`)
+  }
   const dados = await resposta.json()
   const textoGerado = dados?.candidates?.[0]?.content?.parts?.[0]?.text ?? '{}'
   let termos: string[] = []
