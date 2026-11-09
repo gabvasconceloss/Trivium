@@ -1,16 +1,36 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import { copyFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+
+const base = '/Trivium/'
+
+function spaFallback404() {
+  let outDir
+  return {
+    name: 'spa-fallback-404',
+    apply: 'build',
+    configResolved(config) {
+      outDir = resolve(config.root, config.build.outDir)
+    },
+    closeBundle() {
+      copyFileSync(resolve(outDir, 'index.html'), resolve(outDir, '404.html'))
+    }
+  }
+}
 
 export default defineConfig({
+  base,
   server: { port: 5173, host: true },
   plugins: [
     react(),
+    spaFallback404(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'robots.txt'],
       manifest: {
-        id: '/',
+        id: base,
         name: 'Trivium - Plataforma de Estudo',
         short_name: 'Trivium',
         description: 'Cadernos, atividades e curadoria de videoaulas com gamificação.',
@@ -18,8 +38,8 @@ export default defineConfig({
         background_color: '#0F1222',
         display: 'standalone',
         orientation: 'portrait-primary',
-        start_url: '/',
-        scope: '/',
+        start_url: base,
+        scope: base,
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },
@@ -28,7 +48,8 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2}'],
-        navigateFallback: '/index.html',
+        globIgnores: ['**/node_modules/**/*', '404.html'],
+        navigateFallback: `${base}index.html`,
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.hostname.endsWith('.supabase.co') && url.pathname.startsWith('/rest/'),
