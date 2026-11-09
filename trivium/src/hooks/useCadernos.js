@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { traduzirErro } from '../lib/erros'
 
 export function useCadernos(alunoId) {
   const [cadernos, setCadernos] = useState([])
@@ -15,7 +16,7 @@ export function useCadernos(alunoId) {
       .select('id, nome, cor_tema, icone, created_at, updated_at, topicos ( id )')
       .eq('aluno_id', alunoId)
       .order('updated_at', { ascending: false })
-    if (error) { setErro(error.message); setCarregando(false); return }
+    if (error) { setErro(traduzirErro(error)); setCarregando(false); return }
     const contagem = {}
     data.forEach((m) => { contagem[m.id] = m.topicos?.length ?? 0 })
     setCadernos(data.map(({ topicos, ...resto }) => resto))

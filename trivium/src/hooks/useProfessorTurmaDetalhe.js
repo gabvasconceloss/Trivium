@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { traduzirErro } from '../lib/erros'
 
 /** Detalhe de uma turma: lista de alunos + atividades criadas para ela (RF03, RF04). */
 export function useProfessorTurmaDetalhe(turmaId, professorId) {
@@ -21,7 +22,7 @@ export function useProfessorTurmaDetalhe(turmaId, professorId) {
       ])
 
     if (turmaError || alunosError || atividadesError) {
-      setErro((turmaError || alunosError || atividadesError).message)
+      setErro(traduzirErro(turmaError || alunosError || atividadesError))
       setCarregando(false)
       return
     }

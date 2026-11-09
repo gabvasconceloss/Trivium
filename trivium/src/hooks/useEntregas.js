@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { traduzirErro } from '../lib/erros'
 
 /**
  * Lado do ALUNO: lista as entregas das atividades formais da própria turma
@@ -19,7 +20,7 @@ export function useEntregas(alunoId) {
       .select('id, status, nota, entregue_em, atividade_id, atividades ( id, titulo, descricao, materia, data_entrega )')
       .eq('aluno_id', alunoId)
       .order('created_at', { ascending: false })
-    if (error) { setErro(error.message); setCarregando(false); return }
+    if (error) { setErro(traduzirErro(error)); setCarregando(false); return }
     setEntregas(data); setCarregando(false)
   }, [alunoId])
 

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { traduzirErro } from '../lib/erros'
 
 /** Lançamento de notas (RF05): lista as entregas de uma atividade, uma por aluno. */
 export function useProfessorAtividadeDetalhe(atividadeId) {
@@ -18,7 +19,7 @@ export function useProfessorAtividadeDetalhe(atividadeId) {
     ])
 
     if (atividadeError || entregasError) {
-      setErro((atividadeError || entregasError).message)
+      setErro(traduzirErro(atividadeError || entregasError))
       setCarregando(false)
       return
     }

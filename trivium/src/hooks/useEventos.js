@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { traduzirErro } from '../lib/erros'
 
 export function useEventos(alunoId) {
   const [eventos, setEventos] = useState([])
@@ -15,7 +16,7 @@ export function useEventos(alunoId) {
       .eq('aluno_id', alunoId)
       .order('data', { ascending: true })
       .order('hora_inicio', { ascending: true })
-    if (error) { setErro(error.message); setCarregando(false); return }
+    if (error) { setErro(traduzirErro(error)); setCarregando(false); return }
     setEventos(data); setCarregando(false)
   }, [alunoId])
 

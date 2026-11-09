@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { gerarCodigoAleatorio } from '../lib/utils'
+import { traduzirErro } from '../lib/erros'
 
 /** Lado do PROFESSOR: criar/listar turmas, cada uma com um código de acesso único (RN09). */
 export function useProfessorTurmas(professorId) {
@@ -17,7 +18,7 @@ export function useProfessorTurmas(professorId) {
       .select('id, nome, escola, codigo_acesso, created_at, alunos ( id )')
       .eq('professor_id', professorId)
       .order('created_at', { ascending: false })
-    if (error) { setErro(error.message); setCarregando(false); return }
+    if (error) { setErro(traduzirErro(error)); setCarregando(false); return }
     const contagem = {}
     data.forEach((t) => { contagem[t.id] = t.alunos?.length ?? 0 })
     setTurmas(data.map(({ alunos, ...resto }) => resto))
@@ -44,7 +45,7 @@ export function useProfessorTurmas(professorId) {
       ultimoErro = error
       if (error.code !== '23505') break // só tenta de novo se for colisão de código único
     }
-    throw new Error(ultimoErro?.message || 'Não foi possível criar a turma.')
+    throw new Error(traduzirErro(ultimoErro, 'Não foi possível criar a turma.'))
   }, [professorId])
 
   const excluirTurma = useCallback(async (turmaId) => {

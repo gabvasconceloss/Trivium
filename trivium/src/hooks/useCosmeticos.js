@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { traduzirErro } from '../lib/erros'
 
 /** Catálogo de cosméticos + o que o aluno já desbloqueou (RN19). */
 export function useCosmeticos(alunoId) {
@@ -16,7 +17,7 @@ export function useCosmeticos(alunoId) {
       supabase.from('aluno_cosmeticos').select('cosmetico_id').eq('aluno_id', alunoId)
     ])
     if (catalogoError || desbloqueadosError) {
-      setErro((catalogoError || desbloqueadosError).message)
+      setErro(traduzirErro(catalogoError || desbloqueadosError))
       setCarregando(false)
       return
     }
