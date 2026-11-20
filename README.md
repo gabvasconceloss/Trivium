@@ -10,292 +10,85 @@
 </p>
 
 <p>
-  <a href="https://gabvasconceloss.github.io/Trivium/"><strong>Acessar aplicação</strong></a>
-  ·
-  <a href="#como-executar-localmente">Executar localmente</a>
-  ·
-  <a href="#arquitetura">Arquitetura</a>
+  <a href="https://gabvasconceloss.github.io/Trivium/"><strong>Acessar a plataforma</strong></a>
 </p>
 
-[![React](https://img.shields.io/badge/React-18.3-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
-[![Vite](https://img.shields.io/badge/Vite-5.4-20232A?style=flat-square&logo=vite&logoColor=646CFF)](https://vitejs.dev)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-20232A?style=flat-square&logo=tailwindcss&logoColor=38BDF8)](https://tailwindcss.com)
-[![Supabase](https://img.shields.io/badge/Supabase-Postgres-20232A?style=flat-square&logo=supabase&logoColor=3ECF8E)](https://supabase.com)
-[![Gemini](https://img.shields.io/badge/Google_Gemini-API-20232A?style=flat-square&logo=googlegemini&logoColor=8E75B2)](https://ai.google.dev)
-[![PWA](https://img.shields.io/badge/PWA-Instalável-20232A?style=flat-square&logo=pwa&logoColor=5A0FC8)](https://web.dev/progressive-web-apps/)
+[![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-20232A?style=flat-square&logo=vite&logoColor=646CFF)](https://vitejs.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-20232A?style=flat-square&logo=tailwindcss&logoColor=38BDF8)](https://tailwindcss.com)
+[![Supabase](https://img.shields.io/badge/Supabase-20232A?style=flat-square&logo=supabase&logoColor=3ECF8E)](https://supabase.com)
+[![Gemini](https://img.shields.io/badge/Google_Gemini-20232A?style=flat-square&logo=googlegemini&logoColor=8E75B2)](https://ai.google.dev)
+[![PWA](https://img.shields.io/badge/PWA-20232A?style=flat-square&logo=pwa&logoColor=5A0FC8)](https://web.dev/progressive-web-apps/)
 
 </div>
 
 <br/>
 
-## Visão geral
+## Sobre
 
-O Trivium reúne em um único ambiente o caderno do aluno, as atividades da turma e um sistema de progressão baseado em XP. Cada ação de estudo gera um resultado mensurável:
+Estudar exige constância, e constância depende de motivação e organização. O Trivium reúne em um único lugar o caderno do aluno, as atividades da turma e um sistema de progressão inspirado em jogos, para que cada momento de estudo gere um resultado visível.
 
-- **Criar um tópico** no caderno permite buscar videoaulas recomendadas por IA.
-- **Assistir a uma aula** registra participação e mantém a sequência de dias de estudo.
-- **Entregar uma atividade no prazo** concede 20 XP.
-- **Atingir metas** libera conquistas, XP bônus e itens de personalização de perfil.
-
-Toda a lógica de pontuação é executada no banco de dados, por meio de funções e triggers. O cliente não tem permissão para alterar XP, nível ou notas.
+O aluno organiza seus resumos, encontra videoaulas sobre o que está estudando, entrega atividades e acompanha sua evolução. O professor gerencia turmas, publica atividades e avalia entregas, tudo no mesmo ambiente.
 
 > [!NOTE]
-> A aplicação possui dois papéis, **Aluno** e **Professor**, com áreas e rotas separadas. O acesso a cada rota é validado pelo papel do usuário autenticado.
+> O Trivium é um aplicativo web instalável. Pode ser usado no navegador ou adicionado à tela inicial do celular e do computador, como um app nativo.
 
-## Funcionalidades
+## Para o aluno
 
-### Professor
+**Cadernos digitais**<br/>
+Resumos organizados por matéria e tópico, em um editor por blocos com texto, listas, checklists, imagens e cartões. Tudo é salvo automaticamente.
 
-- **Turmas:** criação de turmas com código de acesso gerado automaticamente.
-- **Atividades:** cadastro de atividades com prazo. Uma entrega pendente é criada para cada aluno da turma.
-- **Avaliação:** acompanhamento das entregas e lançamento de notas. Somente o professor da turma pode alterá-las.
+**Videoaulas recomendadas por IA**<br/>
+A partir de um tópico do caderno, a plataforma encontra videoaulas educativas sobre o assunto, selecionadas para a faixa etária do aluno e reproduzidas dentro do próprio app.
 
-### Aluno
+**Atividades e notas**<br/>
+Acompanhamento das atividades da turma, registro de entrega e consulta das notas lançadas pelo professor.
 
-- **Dashboard:** XP, nível, sequência de dias e média geral.
-- **Cadernos:** organização por matéria e tópico, com editor em blocos (texto, subtítulo, lista, checklist, imagem e cartão) e salvamento automático.
-- **Atividades:** registro de entrega e consulta de notas.
-- **Calendário:** eventos pessoais de estudo, sem impacto em XP ou notas.
-- **Conta:** preferências pessoais, incluindo modo escuro.
+**Calendário pessoal**<br/>
+Planejamento de sessões de estudo e compromissos.
 
-### Curadoria de videoaulas
+**Painel de desempenho**<br/>
+Nível, experiência acumulada, sequência de dias de estudo e média geral em uma única visão.
 
-A busca de aulas é feita pela Edge Function `curadoria-videos`:
+## Para o professor
 
-1. O **Gemini** gera de 1 a 3 termos de busca adequados à idade do aluno. O modelo é instruído a não responder o conteúdo, apenas a gerar os termos.
-2. A **YouTube Data API** busca os vídeos com filtro de conteúdo seguro, categoria Educação, idioma pt-BR e duração média.
-3. Os três resultados são salvos no tópico e em um cache compartilhado, evitando novas chamadas às APIs para o mesmo assunto.
-4. A reprodução acontece dentro da aplicação, via `youtube-nocookie.com`.
+**Gestão de turmas**<br/>
+Criação de turmas com código de acesso para a entrada dos alunos.
 
-> [!TIP]
-> A função resolve automaticamente um modelo Gemini disponível. Ela tenta primeiro os aliases `gemini-flash-latest` e `gemini-pro-latest` e, se falharem, consulta a lista de modelos. Respostas 429 e 503 são repetidas com intervalo progressivo.
+**Atividades**<br/>
+Publicação de atividades com prazo, distribuídas automaticamente para toda a turma.
 
-### Gamificação
+**Avaliação**<br/>
+Acompanhamento das entregas e lançamento de notas, com a média de cada aluno atualizada em tempo real.
 
-- **Ledger de XP:** cada ganho é registrado em `xp_transacoes`. Um trigger atualiza o total e recalcula o nível.
-- **Progressão:** passar do nível *N* para o *N + 1* exige `100 + 50 × (N − 1)` XP.
-- **Ranking:** classificação da turma geral (XP total) e semanal (últimos 7 dias).
-- **Indicação:** cada aluno tem um código próprio. Resgatar o código de um colega concede 30 XP.
+## Gamificação
 
-<details>
-<summary><strong>Conquistas</strong></summary>
+O progresso do aluno é recompensado de forma contínua:
 
-<br/>
+- **Experiência e níveis:** entregar no prazo, concluir resumos e assistir a aulas rendem experiência, e o aluno sobe de nível.
+- **Conquistas:** metas como pontualidade, frequência e bom desempenho liberam medalhas e bônus.
+- **Ranking da turma:** classificação geral e semanal, incentivando uma competição saudável.
+- **Indicação de colegas:** convidar um amigo para a plataforma gera recompensa.
+- **Personalização de perfil:** avatares, molduras, capas e títulos liberados conforme o aluno evolui.
 
-- **Pontual:** 3 entregas no prazo (+50 XP)
-- **Estudioso:** 3 resumos concluídos (+60 XP)
-- **Participativo:** 5 aulas assistidas (+100 XP)
-- **Mestre da Organização:** 20 entregas no prazo (+150 XP)
-- **Nota de Ouro:** média acima de 9,0 (+200 XP)
-- **Frequência Perfeita:** 30 dias de sequência (+200 XP)
+## Inteligência artificial com responsabilidade
 
-</details>
+A IA do Trivium atua como curadora, não como substituta do estudo. Ela não responde exercícios nem entrega conteúdo pronto. Sua função é encontrar boas videoaulas sobre o tema estudado, com filtros de conteúdo seguro e foco em material educacional em português.
 
-<details>
-<summary><strong>Personalização de perfil</strong></summary>
+## Segurança e privacidade
 
-<br/>
+- Cada usuário acessa somente os próprios dados e os da turma a que pertence.
+- Notas são lançadas exclusivamente pelo professor responsável.
+- A pontuação e as recompensas são calculadas no servidor, sem possibilidade de alteração pelo aluno.
+- Credenciais de serviços externos nunca são expostas ao navegador.
 
-O aluno pode equipar avatar, moldura, capa e título. Os itens são liberados por nível ou por conquista:
+## Tecnologia
 
-- **Molduras:** Básica (nível 1), Neon (2), Fogo (4) e Cyberpunk (6)
-- **Capas:** Synthwave (1), Arcade (3), Neo Tóquio e Galáxia (5)
-- **Títulos:** de *Novato do Saber* (1) a *Lenda da Turma* (10), além de *Pontual* e *Estudioso*, liberados por conquista
-
-Itens bloqueados exibem o requisito de desbloqueio. O banco recusa equipar itens que o aluno ainda não possui.
-
-</details>
-
-### Aplicativo instalável
-
-A aplicação é um PWA, com service worker e cache. Requisições de dados ao Supabase usam a estratégia *NetworkFirst*: buscam na rede primeiro e recorrem ao cache em caso de falha.
-
-## Arquitetura
-
-```mermaid
-flowchart TD
-  U["App React (PWA)"]
-  A["Supabase Auth"]
-  D["Postgres + RLS"]
-  S["Storage"]
-  F["Edge Function<br/>curadoria-videos"]
-  G["Google Gemini"]
-  Y["YouTube Data API"]
-
-  U --> A
-  U --> D
-  U --> S
-  U --> F
-  F --> G
-  F --> Y
-  F --> D
-```
-
-**Front-end**
-
-- React 18, React Router 6 e Tailwind CSS 3
-- Build com Vite 5 e `vite-plugin-pwa`
-- Hospedagem no GitHub Pages, sob o caminho `/Trivium/`
-
-**Back-end (Supabase)**
-
-- **Auth:** autenticação por e-mail e senha
-- **Postgres:** 15 tabelas, todas com Row Level Security
-- **Regras de negócio:** funções `SECURITY DEFINER` e triggers para XP, nível, conquistas, cosméticos e entregas
-- **Storage:** bucket `notas-imagens` para as imagens do editor
-- **Edge Functions (Deno):** `curadoria-videos`
-
-> [!IMPORTANT]
-> As chaves do Gemini e do YouTube ficam exclusivamente nas secrets da Edge Function. O front-end utiliza apenas a URL do projeto e a chave pública (`anon`) do Supabase.
-
-<details>
-<summary><strong>Estrutura de diretórios</strong></summary>
-
-<br/>
-
-```text
-trivium/
-├─ public/
-│  └─ icons/           Ícones do PWA
-├─ src/
-│  ├─ components/      Componentes de interface
-│  ├─ context/         Autenticação e sessão
-│  ├─ hooks/           Acesso a dados
-│  ├─ lib/             Cliente Supabase e utilitários
-│  ├─ pages/           Telas do aluno
-│  │  └─ professor/    Telas do professor
-│  ├─ App.jsx          Definição de rotas
-│  └─ main.jsx
-├─ supabase/
-│  ├─ schema.sql       Tabelas, RLS e triggers
-│  └─ functions/
-│     └─ curadoria-videos/
-├─ vite.config.js
-├─ tailwind.config.js
-└─ package.json
-```
-
-</details>
-
-<details>
-<summary><strong>Rotas</strong></summary>
-
-<br/>
-
-**Públicas:** `/login`, `/criar-conta`
-
-**Aluno:**
-
-- `/dashboard`
-- `/cadernos`
-- `/caderno/:materiaId`
-- `/caderno/:materiaId/topico/:topicoId`
-- `/atividades`
-- `/calendario`
-- `/conquistas`
-- `/perfil`
-- `/conta`
-
-**Professor:**
-
-- `/professor/turmas`
-- `/professor/turmas/:turmaId`
-- `/professor/atividades/:atividadeId`
-- `/professor/conta`
-
-</details>
-
-## Como executar localmente
-
-### Pré-requisitos
-
-- Node.js 18 ou superior
-- Um projeto no [Supabase](https://supabase.com)
-- Para a curadoria: [Supabase CLI](https://supabase.com/docs/guides/cli), chave da Gemini API e chave da YouTube Data API v3
-
-### 1. Instalação
-
-```bash
-git clone https://github.com/gabvasconceloss/Trivium.git
-cd Trivium/trivium
-npm install
-```
-
-### 2. Variáveis de ambiente
-
-```bash
-cp .env.example .env
-```
-
-Preencha com os valores de **Project Settings → API** no painel do Supabase:
-
-```env
-VITE_SUPABASE_URL=https://xxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=sua-chave-anon
-```
-
-### 3. Banco de dados
-
-Execute o conteúdo de `supabase/schema.sql` no **SQL Editor** do Supabase. O script cria tabelas, policies, triggers, o bucket de Storage e o catálogo inicial de conquistas e cosméticos.
-
-> [!TIP]
-> Em ambiente de desenvolvimento, desative **Confirm email** em *Authentication → Settings* para agilizar os testes.
-
-### 4. Edge Function
-
-```bash
-supabase login
-supabase link --project-ref SEU_REF
-supabase functions deploy curadoria-videos
-supabase secrets set GEMINI_API_KEY=...
-supabase secrets set YOUTUBE_API_KEY=...
-```
-
-### 5. Execução
-
-```bash
-npm run dev
-```
-
-A aplicação fica disponível em `http://localhost:5173/Trivium/`.
-
-<details>
-<summary><strong>Scripts disponíveis</strong></summary>
-
-<br/>
-
-- `npm run dev`: servidor de desenvolvimento (alias: `npm start`)
-- `npm run build`: build de produção em `dist/`
-- `npm run preview`: serve o build localmente
-
-</details>
-
-<details>
-<summary><strong>Roteiro de validação</strong></summary>
-
-<br/>
-
-1. Crie uma conta de **Professor**, cadastre uma turma e copie o código de acesso.
-2. Em outra sessão, crie uma conta de **Aluno** com esse código.
-3. Como professor, crie uma atividade para a turma.
-4. Como aluno, registre a entrega, crie um caderno e um tópico e busque videoaulas.
-5. Como professor, lance a nota da atividade.
-6. Como aluno, verifique XP, nível, ranking e conquistas no perfil.
-
-</details>
-
-## Contribuição
-
-1. Crie uma branch a partir da `main`.
-2. Use mensagens de commit no padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/) (`feat:`, `fix:`, `docs:`, `chore:`).
-3. Abra um Pull Request para a `main`. Alterações não são enviadas diretamente para a `main`.
-
-> [!NOTE]
-> O deploy no GitHub Pages é manual: gere o build a partir da `main` e publique o conteúdo de `dist/` na branch `gh-pages`.
+Interface em **React** com **Tailwind CSS**, empacotada com **Vite** como Progressive Web App. Autenticação, banco de dados e funções de servidor sobre **Supabase**. Curadoria de conteúdo com **Google Gemini** e **YouTube Data API**.
 
 ## Licença
 
-Este projeto ainda não possui licença definida. Todos os direitos são reservados ao autor.
+Este projeto não possui licença de uso aberta. Todos os direitos são reservados ao autor.
 
 <br/>
 
