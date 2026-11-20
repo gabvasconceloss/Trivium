@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { buscarVideosParaTopico, registrarParticipacaoAula } from '../lib/curadoria'
 import { gerarId } from '../lib/utils'
+import { traduzirErro } from '../lib/erros'
 
 const BLOCO_INICIAL = () => [{ id: gerarId(), tipo: 'texto', conteudo: '' }]
 
@@ -16,7 +17,7 @@ export function useTopicos(materiaId) {
     const { data, error } = await supabase.from('topicos')
       .select('id, titulo, status_concluido, blocos, videos_recomendados, created_at, updated_at')
       .eq('materia_id', materiaId).order('created_at', { ascending: true })
-    if (error) { setErro(error.message); setCarregando(false); return }
+    if (error) { setErro(traduzirErro(error)); setCarregando(false); return }
     setTopicos(data); setCarregando(false)
   }, [materiaId])
 

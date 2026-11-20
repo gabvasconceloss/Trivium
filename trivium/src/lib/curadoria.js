@@ -1,8 +1,9 @@
 import { supabase } from './supabaseClient'
+import { traduzirErro } from './erros'
 
 export async function buscarVideosParaTopico({ topicoId, materia, assunto, idade = 14 }) {
   const { data, error } = await supabase.functions.invoke('curadoria-videos', { body: { topicoId, materia, assunto, idade } })
-  if (error) throw new Error(error.message || 'Não foi possível buscar videoaulas agora. Tente novamente em instantes.')
+  if (error) throw new Error(traduzirErro(error, 'Não foi possível buscar videoaulas agora. Tente novamente em instantes.'))
   if (!data || !Array.isArray(data.videos)) throw new Error('Resposta inesperada da curadoria de vídeos.')
   return data.videos
 }

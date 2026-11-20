@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { traduzirErro } from '../lib/erros'
 
 export function useConquistas(alunoId) {
   const [conquistas, setConquistas] = useState([])
@@ -16,7 +17,7 @@ export function useConquistas(alunoId) {
         supabase.from('aluno_conquistas').select('*').eq('aluno_id', alunoId),
         supabase.rpc('trivium_ranking_turma')
       ])
-    if (erroCatalogo || erroProgresso) { setErro((erroCatalogo || erroProgresso).message); setCarregando(false); return }
+    if (erroCatalogo || erroProgresso) { setErro(traduzirErro(erroCatalogo || erroProgresso)); setCarregando(false); return }
     const progressoPorConquista = Object.fromEntries((progresso || []).map((p) => [p.conquista_id, p]))
     const mescladas = (catalogo || []).map((c) => ({
       ...c,

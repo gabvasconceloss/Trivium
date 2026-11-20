@@ -34,6 +34,7 @@ export default defineConfig({
         name: 'Trivium - Plataforma de Estudo',
         short_name: 'Trivium',
         description: 'Cadernos, atividades e curadoria de videoaulas com gamificação.',
+        lang: 'pt-BR',
         theme_color: '#3B5FE0',
         background_color: '#0F1222',
         display: 'standalone',

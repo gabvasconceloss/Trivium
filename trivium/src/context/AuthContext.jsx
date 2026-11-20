@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { gerarCodigoAleatorio } from '../lib/utils'
+import { traduzirErro } from '../lib/erros'
 
 const AuthContext = createContext(null)
 
@@ -92,7 +93,7 @@ export function AuthProvider({ children }) {
       const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password: senha })
       if (error) {
         if (error.message.includes('Invalid login')) throw new Error('E-mail ou senha incorretos.')
-        throw new Error(error.message)
+        throw new Error(traduzirErro(error))
       }
       setAuthUser(data.user)
       const papelCarregado = await carregarPerfil(data.user.id)
@@ -138,7 +139,7 @@ export function AuthProvider({ children }) {
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email: email.trim(), password: senha })
     if (signUpError) {
       if (signUpError.message.includes('already registered')) throw new Error('Já existe uma conta com este e-mail.')
-      throw new Error(signUpError.message)
+      throw new Error(traduzirErro(signUpError))
     }
 
     const { session, userId } = await garantirSessaoPosSignUp(signUpData, email, senha)
@@ -161,7 +162,7 @@ export function AuthProvider({ children }) {
       if (ultimoErro?.message?.includes('row-level security')) {
         throw new Error('Sem permissão para criar seu perfil de aluno (RLS). Confira a policy "alunos_insert_proprio".')
       }
-      throw new Error(`Não foi possível concluir seu cadastro: ${ultimoErro?.message || 'erro desconhecido'}`)
+      throw new Error(`Não foi possível concluir seu cadastro: ${traduzirErro(ultimoErro)}`)
     }
 
     const { turmas: turmaDoNovoAluno, ...restoAluno } = novoAluno
@@ -182,7 +183,7 @@ export function AuthProvider({ children }) {
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email: email.trim(), password: senha })
     if (signUpError) {
       if (signUpError.message.includes('already registered')) throw new Error('Já existe uma conta com este e-mail.')
-      throw new Error(signUpError.message)
+      throw new Error(traduzirErro(signUpError))
     }
 
     const { session, userId } = await garantirSessaoPosSignUp(signUpData, email, senha)
@@ -196,7 +197,7 @@ export function AuthProvider({ children }) {
       if (profError.message.includes('row-level security')) {
         throw new Error('Sem permissão para criar seu perfil de professor (RLS). Confira a policy "professores_insert_proprio".')
       }
-      throw new Error(`Não foi possível concluir seu cadastro: ${profError.message}`)
+      throw new Error(`Não foi possível concluir seu cadastro: ${traduzirErro(profError)}`)
     }
 
     setAuthUser(session.user)
@@ -216,7 +217,7 @@ export function AuthProvider({ children }) {
   const atualizarPerfil = useCallback(async (campos) => {
     if (!aluno) return
     const { data, error } = await supabase.from('alunos').update(campos).eq('id', aluno.id).select(SELECT_ALUNO).single()
-    if (error) throw new Error(error.message || 'Não foi possível salvar as alterações.')
+    if (error) throw new Error(traduzirErro(error, 'Não foi possível salvar as alterações.'))
     const { turmas, ...resto } = data
     setAluno(resto)
     if (campos.preferencias?.modo_escuro !== undefined) aplicarTema(campos.preferencias)
