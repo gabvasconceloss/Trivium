@@ -1,134 +1,126 @@
 <div align="center">
 
-<img src="trivium/public/icons/icon-512.png" alt="Logo do Trivium" width="96" />
+<img src="trivium/public/icons/icon-512.png" alt="Trivium" width="88" />
 
-# Trivium
+<h1>Trivium</h1>
 
-**Estude, evolua de nível e deixe a IA encontrar a aula certa para você.**
+<p>
+  Plataforma de estudos gamificada para alunos e professores,<br/>
+  com curadoria de videoaulas por inteligência artificial.
+</p>
 
-Plataforma de estudos gamificada para alunos e professores,<br/>
-com curadoria de videoaulas por IA. Instalável como app (PWA).
+<p>
+  <a href="https://gabvasconceloss.github.io/Trivium/"><strong>Acessar aplicação</strong></a>
+  ·
+  <a href="#como-executar-localmente">Executar localmente</a>
+  ·
+  <a href="#arquitetura">Arquitetura</a>
+</p>
 
-<br/>
-
-[![React](https://img.shields.io/badge/React-18.3-3B5FE0?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![Vite](https://img.shields.io/badge/Vite-5.4-3B5FE0?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-22B8A0?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Supabase](https://img.shields.io/badge/Supabase-Postgres%20·%20Auth%20·%20Edge-22B8A0?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com)
-[![Gemini](https://img.shields.io/badge/IA-Google%20Gemini-8B5CF6?style=flat-square&logo=googlegemini&logoColor=white)](https://ai.google.dev)
-[![YouTube Data API](https://img.shields.io/badge/YouTube-Data%20API%20v3-8B5CF6?style=flat-square&logo=youtube&logoColor=white)](https://developers.google.com/youtube/v3)
-[![PWA](https://img.shields.io/badge/PWA-instalável-F5A623?style=flat-square&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
-
-<br/>
-
-[**🚀 Abrir o app**](https://gabvasconceloss.github.io/Trivium/) ·
-[Sobre](#-sobre-o-projeto) ·
-[Funcionalidades](#-funcionalidades) ·
-[Arquitetura](#-arquitetura) ·
-[Rodar localmente](#-como-executar-localmente)
+[![React](https://img.shields.io/badge/React-18.3-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-5.4-20232A?style=flat-square&logo=vite&logoColor=646CFF)](https://vitejs.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-20232A?style=flat-square&logo=tailwindcss&logoColor=38BDF8)](https://tailwindcss.com)
+[![Supabase](https://img.shields.io/badge/Supabase-Postgres-20232A?style=flat-square&logo=supabase&logoColor=3ECF8E)](https://supabase.com)
+[![Gemini](https://img.shields.io/badge/Google_Gemini-API-20232A?style=flat-square&logo=googlegemini&logoColor=8E75B2)](https://ai.google.dev)
+[![PWA](https://img.shields.io/badge/PWA-Instalável-20232A?style=flat-square&logo=pwa&logoColor=5A0FC8)](https://web.dev/progressive-web-apps/)
 
 </div>
 
----
+<br/>
 
-## 🎓 Sobre o projeto
+## Visão geral
 
-O **Trivium** junta três coisas que costumam viver em apps separados: o **caderno** do aluno, as **atividades** do professor e um **sistema de progressão** estilo jogo.
+O Trivium reúne em um único ambiente o caderno do aluno, as atividades da turma e um sistema de progressão baseado em XP. Cada ação de estudo gera um resultado mensurável:
 
-Na prática, cada coisa que o aluno faz rende algo:
+- **Criar um tópico** no caderno permite buscar videoaulas recomendadas por IA.
+- **Assistir a uma aula** registra participação e mantém a sequência de dias de estudo.
+- **Entregar uma atividade no prazo** concede 20 XP.
+- **Atingir metas** libera conquistas, XP bônus e itens de personalização de perfil.
 
-- 📝 **Cria um tópico** no caderno → a **IA sugere videoaulas** sobre o assunto.
-- ▶️ **Assiste a uma aula** → conta como participação e mantém a **sequência de dias**.
-- 📬 **Entrega uma atividade no prazo** → ganha **+20 XP**.
-- 🏆 **Bate uma meta** → desbloqueia **conquistas**, **XP bônus** e **itens de perfil**.
-
-Toda a pontuação é calculada **dentro do banco de dados**, por funções e triggers. O aluno não consegue alterar o próprio XP, nível ou nota pelo navegador.
+Toda a lógica de pontuação é executada no banco de dados, por meio de funções e triggers. O cliente não tem permissão para alterar XP, nível ou notas.
 
 > [!NOTE]
-> Existem dois papéis com áreas separadas: **Aluno** (`/dashboard`, `/cadernos`, …) e **Professor** (`/professor/...`). Cada rota é protegida pelo papel do usuário logado.
+> A aplicação possui dois papéis, **Aluno** e **Professor**, com áreas e rotas separadas. O acesso a cada rota é validado pelo papel do usuário autenticado.
 
----
+## Funcionalidades
 
-## ✨ Funcionalidades
+### Professor
 
-### 👨‍🏫 Professor
+- **Turmas:** criação de turmas com código de acesso gerado automaticamente.
+- **Atividades:** cadastro de atividades com prazo. Uma entrega pendente é criada para cada aluno da turma.
+- **Avaliação:** acompanhamento das entregas e lançamento de notas. Somente o professor da turma pode alterá-las.
 
-- **Turmas:** cria turmas e recebe um **código de acesso** para compartilhar com os alunos.
-- **Atividades:** cria atividades com prazo por turma. Uma entrega pendente é gerada **automaticamente** para cada aluno.
-- **Notas:** acompanha as entregas e lança a nota. Só o professor da turma consegue alterá-la.
+### Aluno
 
-### 👩‍🎓 Aluno
+- **Dashboard:** XP, nível, sequência de dias e média geral.
+- **Cadernos:** organização por matéria e tópico, com editor em blocos (texto, subtítulo, lista, checklist, imagem e cartão) e salvamento automático.
+- **Atividades:** registro de entrega e consulta de notas.
+- **Calendário:** eventos pessoais de estudo, sem impacto em XP ou notas.
+- **Conta:** preferências pessoais, incluindo modo escuro.
 
-- **Dashboard:** XP, nível, sequência de dias 🔥 e média geral.
-- **Cadernos:** matérias → tópicos, com **editor por blocos** (texto, subtítulo, lista, checklist, imagem e cartão) e salvamento automático.
-- **Atividades:** marca como entregue e acompanha a nota.
-- **Calendário:** eventos pessoais de estudo (não geram XP nem nota).
-- **Conta:** preferências, incluindo **modo escuro**.
+### Curadoria de videoaulas
 
-### 🤖 Curadoria de videoaulas com IA
+A busca de aulas é feita pela Edge Function `curadoria-videos`:
 
-1. O aluno pede aulas sobre um tópico do caderno.
-2. A Edge Function `curadoria-videos` pede ao **Gemini** de 1 a 3 termos de busca adequados à idade do aluno. A IA **não** responde a matéria, só gera os termos.
-3. Os termos vão para a **YouTube Data API** com busca segura, categoria *Educação*, idioma pt-BR e vídeos de duração média.
-4. Os 3 vídeos ficam salvos no tópico e em um **cache** compartilhado. Uma busca repetida pelo mesmo assunto não gasta cota das APIs.
-5. Os vídeos tocam dentro do app via `youtube-nocookie.com`.
+1. O **Gemini** gera de 1 a 3 termos de busca adequados à idade do aluno. O modelo é instruído a não responder o conteúdo, apenas a gerar os termos.
+2. A **YouTube Data API** busca os vídeos com filtro de conteúdo seguro, categoria Educação, idioma pt-BR e duração média.
+3. Os três resultados são salvos no tópico e em um cache compartilhado, evitando novas chamadas às APIs para o mesmo assunto.
+4. A reprodução acontece dentro da aplicação, via `youtube-nocookie.com`.
 
 > [!TIP]
-> A função escolhe sozinha um modelo Gemini que esteja funcionando. Ela tenta os aliases `gemini-flash-latest` e `gemini-pro-latest` e, se falharem, procura na lista de modelos. Erros 429/503 são repetidos com espera.
+> A função resolve automaticamente um modelo Gemini disponível. Ela tenta primeiro os aliases `gemini-flash-latest` e `gemini-pro-latest` e, se falharem, consulta a lista de modelos. Respostas 429 e 503 são repetidas com intervalo progressivo.
 
-### 🎮 Gamificação
+### Gamificação
 
-- **XP em ledger:** todo ganho vira uma linha em `xp_transacoes`. Um trigger soma o XP e recalcula o nível.
-- **Curva de nível:** do nível *N* para o *N+1* são `100 + 50 × (N − 1)` XP.
-- **Ranking da turma:** geral (XP total) e semanal (últimos 7 dias).
-- **Indicação de amigo:** cada aluno tem um código. Resgatar o código rende **+30 XP**.
+- **Ledger de XP:** cada ganho é registrado em `xp_transacoes`. Um trigger atualiza o total e recalcula o nível.
+- **Progressão:** passar do nível *N* para o *N + 1* exige `100 + 50 × (N − 1)` XP.
+- **Ranking:** classificação da turma geral (XP total) e semanal (últimos 7 dias).
+- **Indicação:** cada aluno tem um código próprio. Resgatar o código de um colega concede 30 XP.
 
 <details>
-<summary><b>🏆 Conquistas disponíveis</b></summary>
+<summary><strong>Conquistas</strong></summary>
 
 <br/>
 
-- 🏆 **Pontual:** 3 entregas no prazo · +50 XP
-- 📖 **Estudioso:** 3 resumos concluídos · +60 XP
-- 👥 **Participativo:** 5 aulas assistidas · +100 XP
-- 🗂️ **Mestre da Organização:** 20 entregas no prazo · +150 XP
-- 🥇 **Nota de Ouro:** média acima de 9,0 · +200 XP
-- 📅 **Frequência Perfeita:** 30 dias de sequência · +200 XP
+- **Pontual:** 3 entregas no prazo (+50 XP)
+- **Estudioso:** 3 resumos concluídos (+60 XP)
+- **Participativo:** 5 aulas assistidas (+100 XP)
+- **Mestre da Organização:** 20 entregas no prazo (+150 XP)
+- **Nota de Ouro:** média acima de 9,0 (+200 XP)
+- **Frequência Perfeita:** 30 dias de sequência (+200 XP)
 
 </details>
 
 <details>
-<summary><b>🎨 Customização de perfil</b></summary>
+<summary><strong>Personalização de perfil</strong></summary>
 
 <br/>
 
-O aluno equipa **avatar**, **moldura**, **capa** e **título**. Os itens são liberados automaticamente ao subir de nível ou ao ganhar uma conquista específica. Alguns exemplos:
+O aluno pode equipar avatar, moldura, capa e título. Os itens são liberados por nível ou por conquista:
 
-- **Molduras:** Básica (nv. 1) · Neon (nv. 2) · Fogo (nv. 4) · Cyberpunk (nv. 6)
-- **Capas:** Synthwave (nv. 1) · Arcade (nv. 3) · Neo Tóquio e Galáxia (nv. 5)
-- **Títulos:** de *Novato do Saber* (nv. 1) a *Lenda da Turma* (nv. 10), além de *Pontual* e *Estudioso*, que são liberados por conquista.
+- **Molduras:** Básica (nível 1), Neon (2), Fogo (4) e Cyberpunk (6)
+- **Capas:** Synthwave (1), Arcade (3), Neo Tóquio e Galáxia (5)
+- **Títulos:** de *Novato do Saber* (1) a *Lenda da Turma* (10), além de *Pontual* e *Estudioso*, liberados por conquista
 
-Itens bloqueados mostram o nível necessário. O banco recusa equipar um item que o aluno ainda não tem.
+Itens bloqueados exibem o requisito de desbloqueio. O banco recusa equipar itens que o aluno ainda não possui.
 
 </details>
 
-### 📱 PWA
+### Aplicativo instalável
 
-O app pode ser instalado no celular e no desktop, tem service worker e funciona com cache. Os dados do Supabase usam a estratégia *NetworkFirst*: buscam na rede primeiro e, se ela falhar, usam o cache.
+A aplicação é um PWA, com service worker e cache. Requisições de dados ao Supabase usam a estratégia *NetworkFirst*: buscam na rede primeiro e recorrem ao cache em caso de falha.
 
----
-
-## 🧱 Arquitetura
+## Arquitetura
 
 ```mermaid
 flowchart TD
-  U["📱 App React (PWA)"]
-  A["🔐 Supabase Auth"]
-  D["🗄️ Postgres + RLS<br/>triggers de XP"]
-  S["🖼️ Storage<br/>notas-imagens"]
-  F["⚡ Edge Function<br/>curadoria-videos"]
-  G["🤖 Google Gemini"]
-  Y["▶️ YouTube Data API"]
+  U["App React (PWA)"]
+  A["Supabase Auth"]
+  D["Postgres + RLS"]
+  S["Storage"]
+  F["Edge Function<br/>curadoria-videos"]
+  G["Google Gemini"]
+  Y["YouTube Data API"]
 
   U --> A
   U --> D
@@ -141,61 +133,44 @@ flowchart TD
 
 **Front-end**
 
-- React 18 + React Router 6 + Tailwind CSS 3
+- React 18, React Router 6 e Tailwind CSS 3
 - Build com Vite 5 e `vite-plugin-pwa`
-- Publicado no GitHub Pages em `/Trivium/`
+- Hospedagem no GitHub Pages, sob o caminho `/Trivium/`
 
 **Back-end (Supabase)**
 
-- **Auth:** login por e-mail e senha
-- **Postgres:** 15 tabelas com **Row Level Security** em todas
-- **Regras de negócio:** funções `SECURITY DEFINER` e triggers (XP, nível, conquistas, cosméticos, entregas)
+- **Auth:** autenticação por e-mail e senha
+- **Postgres:** 15 tabelas, todas com Row Level Security
+- **Regras de negócio:** funções `SECURITY DEFINER` e triggers para XP, nível, conquistas, cosméticos e entregas
 - **Storage:** bucket `notas-imagens` para as imagens do editor
-- **Edge Function (Deno):** `curadoria-videos`
+- **Edge Functions (Deno):** `curadoria-videos`
 
 > [!IMPORTANT]
-> As chaves do Gemini e do YouTube ficam **somente** nas secrets da Edge Function. O front-end usa apenas a URL e a chave pública (*anon*) do Supabase.
-
----
-
-## 🗂️ Estrutura do projeto
+> As chaves do Gemini e do YouTube ficam exclusivamente nas secrets da Edge Function. O front-end utiliza apenas a URL do projeto e a chave pública (`anon`) do Supabase.
 
 <details>
-<summary><b>Ver árvore de diretórios</b></summary>
+<summary><strong>Estrutura de diretórios</strong></summary>
 
 <br/>
 
 ```text
 trivium/
 ├─ public/
-│  ├─ icons/          # ícones do PWA
-│  └─ robots.txt
+│  └─ icons/           Ícones do PWA
 ├─ src/
-│  ├─ components/     # UI reutilizável
-│  │  ├─ BlockEditor.jsx
-│  │  ├─ VideoPlayer.jsx
-│  │  ├─ RotaProtegida.jsx
-│  │  └─ ...
-│  ├─ context/
-│  │  └─ AuthContext.jsx
-│  ├─ hooks/          # acesso a dados
-│  │  ├─ useCadernos.js
-│  │  ├─ useRanking.js
-│  │  └─ ...
-│  ├─ lib/
-│  │  ├─ supabaseClient.js
-│  │  ├─ curadoria.js
-│  │  └─ erros.js     # mensagens em pt-BR
-│  ├─ pages/          # telas do aluno
-│  │  └─ professor/   # telas do professor
-│  ├─ App.jsx         # rotas
+│  ├─ components/      Componentes de interface
+│  ├─ context/         Autenticação e sessão
+│  ├─ hooks/           Acesso a dados
+│  ├─ lib/             Cliente Supabase e utilitários
+│  ├─ pages/           Telas do aluno
+│  │  └─ professor/    Telas do professor
+│  ├─ App.jsx          Definição de rotas
 │  └─ main.jsx
 ├─ supabase/
-│  ├─ schema.sql      # tabelas, RLS, triggers
+│  ├─ schema.sql       Tabelas, RLS e triggers
 │  └─ functions/
 │     └─ curadoria-videos/
-│        └─ index.ts
-├─ vite.config.js     # base + PWA
+├─ vite.config.js
 ├─ tailwind.config.js
 └─ package.json
 ```
@@ -203,16 +178,13 @@ trivium/
 </details>
 
 <details>
-<summary><b>Ver rotas do app</b></summary>
+<summary><strong>Rotas</strong></summary>
 
 <br/>
 
-**Públicas**
+**Públicas:** `/login`, `/criar-conta`
 
-- `/login`
-- `/criar-conta`
-
-**Aluno**
+**Aluno:**
 
 - `/dashboard`
 - `/cadernos`
@@ -224,7 +196,7 @@ trivium/
 - `/perfil`
 - `/conta`
 
-**Professor**
+**Professor:**
 
 - `/professor/turmas`
 - `/professor/turmas/:turmaId`
@@ -233,17 +205,15 @@ trivium/
 
 </details>
 
----
-
-## 🚀 Como executar localmente
+## Como executar localmente
 
 ### Pré-requisitos
 
-- **Node.js** 18 ou superior e **npm**
-- Um projeto no **[Supabase](https://supabase.com)**
-- Para a curadoria por IA: **Supabase CLI**, uma chave da **Gemini API** e uma da **YouTube Data API v3**
+- Node.js 18 ou superior
+- Um projeto no [Supabase](https://supabase.com)
+- Para a curadoria: [Supabase CLI](https://supabase.com/docs/guides/cli), chave da Gemini API e chave da YouTube Data API v3
 
-### 1. Instalar
+### 1. Instalação
 
 ```bash
 git clone https://github.com/gabvasconceloss/Trivium.git
@@ -253,28 +223,25 @@ npm install
 
 ### 2. Variáveis de ambiente
 
-Copie o modelo e preencha com os dados de **Project Settings → API** no Supabase:
-
 ```bash
 cp .env.example .env
 ```
+
+Preencha com os valores de **Project Settings → API** no painel do Supabase:
 
 ```env
 VITE_SUPABASE_URL=https://xxxx.supabase.co
 VITE_SUPABASE_ANON_KEY=sua-chave-anon
 ```
 
-> [!CAUTION]
-> Nunca faça commit do `.env`. Ele já está no `.gitignore`.
-
 ### 3. Banco de dados
 
-No **SQL Editor** do Supabase, cole e rode o arquivo `supabase/schema.sql` inteiro. Ele cria as tabelas, as policies de RLS, os triggers, o bucket de Storage e o catálogo inicial de conquistas e cosméticos.
+Execute o conteúdo de `supabase/schema.sql` no **SQL Editor** do Supabase. O script cria tabelas, policies, triggers, o bucket de Storage e o catálogo inicial de conquistas e cosméticos.
 
 > [!TIP]
-> Para testar mais rápido, desative **Confirm email** em *Authentication → Settings*.
+> Em ambiente de desenvolvimento, desative **Confirm email** em *Authentication → Settings* para agilizar os testes.
 
-### 4. Edge Function (curadoria por IA)
+### 4. Edge Function
 
 ```bash
 supabase login
@@ -284,59 +251,54 @@ supabase secrets set GEMINI_API_KEY=...
 supabase secrets set YOUTUBE_API_KEY=...
 ```
 
-### 5. Rodar
+### 5. Execução
 
 ```bash
 npm run dev
 ```
 
-O app abre em `http://localhost:5173/Trivium/`.
+A aplicação fica disponível em `http://localhost:5173/Trivium/`.
 
 <details>
-<summary><b>Todos os scripts</b></summary>
+<summary><strong>Scripts disponíveis</strong></summary>
 
 <br/>
 
-- `npm run dev` / `npm start`: servidor de desenvolvimento
+- `npm run dev`: servidor de desenvolvimento (alias: `npm start`)
 - `npm run build`: build de produção em `dist/`
 - `npm run preview`: serve o build localmente
 
 </details>
 
 <details>
-<summary><b>Roteiro rápido de teste</b></summary>
+<summary><strong>Roteiro de validação</strong></summary>
 
 <br/>
 
-1. Cadastre-se como **Professor**, crie uma turma e copie o código.
-2. Em outra sessão, cadastre-se como **Aluno** usando esse código.
-3. Como professor, crie uma atividade na turma.
-4. Como aluno, marque a atividade como entregue, crie um caderno e um tópico e busque aulas com IA.
+1. Crie uma conta de **Professor**, cadastre uma turma e copie o código de acesso.
+2. Em outra sessão, crie uma conta de **Aluno** com esse código.
+3. Como professor, crie uma atividade para a turma.
+4. Como aluno, registre a entrega, crie um caderno e um tópico e busque videoaulas.
 5. Como professor, lance a nota da atividade.
-6. Como aluno, confira XP, nível, ranking e conquistas em **Meu Perfil**.
+6. Como aluno, verifique XP, nível, ranking e conquistas no perfil.
 
 </details>
 
----
-
-## 🤝 Contribuição
+## Contribuição
 
 1. Crie uma branch a partir da `main`.
-2. Faça commits pequenos e descritivos (ex.: `fix:`, `feat:`, `chore:`).
-3. Abra um **Pull Request para a `main`**. Nada é enviado direto para a `main`.
+2. Use mensagens de commit no padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/) (`feat:`, `fix:`, `docs:`, `chore:`).
+3. Abra um Pull Request para a `main`. Alterações não são enviadas diretamente para a `main`.
 
 > [!NOTE]
-> O deploy no GitHub Pages é manual: faça o build da `main` e publique o conteúdo de `dist/` na branch `gh-pages`.
+> O deploy no GitHub Pages é manual: gere o build a partir da `main` e publique o conteúdo de `dist/` na branch `gh-pages`.
 
-## 📄 Licença
+## Licença
 
-Este projeto ainda não tem uma licença definida. Todos os direitos são reservados ao autor.
+Este projeto ainda não possui licença definida. Todos os direitos são reservados ao autor.
 
----
+<br/>
 
 <div align="center">
-
-Desenvolvido por **Gabriel Vasconcelos Franco Martins**<br/>
-<sub>Engenharia de Software</sub>
-
+<sub>Desenvolvido por <strong>Gabriel Vasconcelos Franco Martins</strong> · Engenharia de Software</sub>
 </div>
