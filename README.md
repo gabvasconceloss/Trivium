@@ -1,97 +1,62 @@
-<div align="center">
+# 🎓 Trivium
+> **Plataforma de Estudos Gamificada e Inteligente (PWA)**
 
-<img src="trivium/public/icons/icon-512.png" alt="Trivium" width="88" />
+O **Trivium** é um ambiente educacional moderno projetado para transformar a forma como alunos e professores interagem com o aprendizado. Unindo ferramentas formais de ensino com um ecossistema completo de gamificação e curadoria por Inteligência Artificial, a plataforma busca maximizar o engajamento e a organização dos estudos.
 
-<h1>Trivium</h1>
+---
 
-<p>
-  Plataforma de estudos gamificada para alunos e professores,<br/>
-  com curadoria de videoaulas por inteligência artificial.
-</p>
+## 🚀 Tecnologias Utilizadas
 
-<p>
-  <a href="https://gabvasconceloss.github.io/Trivium/"><strong>Acessar a plataforma</strong></a>
-</p>
+O projeto foi construído com uma stack moderna, com foco em performance e experiência *mobile-first*:
 
-[![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
-[![Vite](https://img.shields.io/badge/Vite-20232A?style=flat-square&logo=vite&logoColor=646CFF)](https://vitejs.dev)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-20232A?style=flat-square&logo=tailwindcss&logoColor=38BDF8)](https://tailwindcss.com)
-[![Supabase](https://img.shields.io/badge/Supabase-20232A?style=flat-square&logo=supabase&logoColor=3ECF8E)](https://supabase.com)
-[![Gemini](https://img.shields.io/badge/Google_Gemini-20232A?style=flat-square&logo=googlegemini&logoColor=8E75B2)](https://ai.google.dev)
-[![PWA](https://img.shields.io/badge/PWA-20232A?style=flat-square&logo=pwa&logoColor=5A0FC8)](https://web.dev/progressive-web-apps/)
+*   **Front-end:** React + Vite (JavaScript)
+*   **Back-end & BaaS:** Supabase (PostgreSQL, Auth, Storage)
+*   **Serverless:** Supabase Edge Functions (Deno)
+*   **Inteligência Artificial:** Google Gemini API
+*   **Integrações:** YouTube Data API
+*   **Arquitetura:** PWA (Progressive Web App) instalável
 
-</div>
+---
 
-<br/>
+## ✨ Principais Funcionalidades
 
-## Sobre
+O Trivium opera com dois papéis de usuário distintos, entregando uma experiência personalizada para cada necessidade.
 
-Estudar exige constância, e constância depende de motivação e organização. O Trivium reúne em um único lugar o caderno do aluno, as atividades da turma e um sistema de progressão inspirado em jogos, para que cada momento de estudo gere um resultado visível.
+### 👥 Perfis de Acesso
+*   **👨‍🏫 Professor:** Possui controle total para criar turmas, gerar códigos de acesso seguros, elaborar atividades formais detalhadas e gerenciar o lançamento de notas das entregas.
+*   **👩‍🎓 Aluno:** Acessa um painel dinâmico focado no seu desenvolvimento, com ferramentas de estudo integradas a um sistema de progressão contínua.
 
-O aluno organiza seus resumos, encontra videoaulas sobre o que está estudando, entrega atividades e acompanha sua evolução. O professor gerencia turmas, publica atividades e avalia entregas, tudo no mesmo ambiente.
+### 🎮 Gamificação Profunda (XP Ledger)
+Para manter os alunos motivados, o Trivium possui um motor de gamificação completo:
+*   **Progressão de Nível:** Ações na plataforma (entregar atividades, interagir com o sistema) rendem **XP**, calculados de forma segura no back-end, permitindo que o aluno suba de nível.
+*   **Conquistas (Badges):** Desafios específicos que recompensam o aluno com medalhas virtuais ao serem concluídos.
+*   **Rankings:** Tabelas de classificação (Leaderboards) gerais e semanais por turma, promovendo uma competição saudável.
+*   **Economia Social:** Um sistema de indicação de amigos que recompensa o aluno com XP bônus.
 
-> [!NOTE]
-> O Trivium é um aplicativo web instalável. Pode ser usado no navegador ou adicionado à tela inicial do celular e do computador, como um app nativo.
+### 🎨 Customização de Perfil
+Os alunos podem expressar sua identidade na plataforma através de itens cosméticos:
+*   Personalização de **Avatar, Moldura, Capa e Título**.
+*   *Mecânica de desbloqueio:* Itens mais raros ou avançados exigem que o aluno alcance determinados níveis, incentivando o estudo contínuo.
 
-## Para o aluno
+### 🤖 Curadoria Inteligente com IA
+A plataforma atua como um assistente de estudos proativo:
+*   Através de **Edge Functions** seguras, o Trivium conecta a IA do **Google Gemini** com a API do **YouTube**.
+*   Ao criar um tópico de estudo, a IA analisa o contexto e busca, filtra e recomenda automaticamente as melhores videoaulas disponíveis, poupando o tempo de pesquisa do aluno.
 
-**Cadernos digitais**<br/>
-Resumos organizados por matéria e tópico, em um editor por blocos com texto, listas, checklists, imagens e cartões. Tudo é salvo automaticamente.
+### 📝 Ferramentas de Estudo Avançadas
+*   **Editor por Blocos:** Um editor de notas robusto, no estilo *Notion*, que permite aos alunos criar resumos e cadernos estruturados, modulares e ricos em formatação.
+*   **Calendário Pessoal:** Gestão de tempo integrada para organização de eventos de estudo individuais.
 
-**Videoaulas recomendadas por IA**<br/>
-A partir de um tópico do caderno, a plataforma encontra videoaulas educativas sobre o assunto, selecionadas para a faixa etária do aluno e reproduzidas dentro do próprio app.
+---
 
-**Atividades e notas**<br/>
-Acompanhamento das atividades da turma, registro de entrega e consulta das notas lançadas pelo professor.
+## ⚙️ Estrutura de Back-end e Segurança
 
-**Calendário pessoal**<br/>
-Planejamento de sessões de estudo e compromissos.
+A lógica de negócios e a segurança dos dados são garantidas diretamente na camada do banco de dados (Supabase/PostgreSQL):
+*   **Row Level Security (RLS):** Políticas rígidas garantem que alunos só acessem seus próprios dados e interajam apenas com as turmas em que estão matriculados.
+*   **Security Definer Functions:** Toda a transação de XP (Ledger) e atribuição de conquistas ocorre através de funções seguras (Triggers/RPCs) no banco, impedindo que usuários manipulem seus próprios níveis ou pontuações via front-end.
+*   **Storage Otimizado:** Bucket dedicado para o armazenamento seguro de imagens, submissões de atividades e personalizações de perfil.
 
-**Painel de desempenho**<br/>
-Nível, experiência acumulada, sequência de dias de estudo e média geral em uma única visão.
+---
 
-## Para o professor
-
-**Gestão de turmas**<br/>
-Criação de turmas com código de acesso para a entrada dos alunos.
-
-**Atividades**<br/>
-Publicação de atividades com prazo, distribuídas automaticamente para toda a turma.
-
-**Avaliação**<br/>
-Acompanhamento das entregas e lançamento de notas, com a média de cada aluno atualizada em tempo real.
-
-## Gamificação
-
-O progresso do aluno é recompensado de forma contínua:
-
-- **Experiência e níveis:** entregar no prazo, concluir resumos e assistir a aulas rendem experiência, e o aluno sobe de nível.
-- **Conquistas:** metas como pontualidade, frequência e bom desempenho liberam medalhas e bônus.
-- **Ranking da turma:** classificação geral e semanal, incentivando uma competição saudável.
-- **Indicação de colegas:** convidar um amigo para a plataforma gera recompensa.
-- **Personalização de perfil:** avatares, molduras, capas e títulos liberados conforme o aluno evolui.
-
-## Inteligência artificial com responsabilidade
-
-A IA do Trivium atua como curadora, não como substituta do estudo. Ela não responde exercícios nem entrega conteúdo pronto. Sua função é encontrar boas videoaulas sobre o tema estudado, com filtros de conteúdo seguro e foco em material educacional em português.
-
-## Segurança e privacidade
-
-- Cada usuário acessa somente os próprios dados e os da turma a que pertence.
-- Notas são lançadas exclusivamente pelo professor responsável.
-- A pontuação e as recompensas são calculadas no servidor, sem possibilidade de alteração pelo aluno.
-- Credenciais de serviços externos nunca são expostas ao navegador.
-
-## Tecnologia
-
-Interface em **React** com **Tailwind CSS**, empacotada com **Vite** como Progressive Web App. Autenticação, banco de dados e funções de servidor sobre **Supabase**. Curadoria de conteúdo com **Google Gemini** e **YouTube Data API**.
-
-## Licença
-
-Este projeto não possui licença de uso aberta. Todos os direitos são reservados aos autores.
-
-<br/>
-
-<div align="center">
-<sub>Desenvolvido por <strong>Gabriel Vasconcelos</strong> e <strong>Raul Rosa</strong> · Engenharia de Software</sub>
-</div>
+**Desenvolvido por Gabriel Vasconcelos Franco Martins**  
+*Engenharia de Software*
