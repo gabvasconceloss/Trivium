@@ -88,10 +88,10 @@ Interface em **React** com **Tailwind CSS**, empacotada com **Vite** como Progre
 
 ## Licença
 
-Este projeto não possui licença de uso aberta. Todos os direitos são reservados ao autor.
+Este projeto não possui licença de uso aberta. Todos os direitos são reservados aos autores.
 
 <br/>
 
 <div align="center">
-<sub>Desenvolvido por <strong>Gabriel Vasconcelos Franco Martins</strong> · Engenharia de Software</sub>
+<sub>Desenvolvido por <strong>Gabriel Vasconcelos</strong> e <strong>Raul Rosa</strong> · Engenharia de Software</sub>
 </div>
